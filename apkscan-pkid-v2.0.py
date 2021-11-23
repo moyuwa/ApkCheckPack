@@ -81,7 +81,7 @@ def check_jiagu(filename):
             break
         else:
             for zippath in azip.namelist():
-                if path==zippath:
+                if zippath in path:
                     jiagu=u"检测到 【{}】 加固".format(markNameMap[path])
                     stop = True
                     break
