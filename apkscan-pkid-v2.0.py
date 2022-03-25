@@ -51,6 +51,8 @@ markNameMap["lib/armeabi/libshell-super.2019.so"]="腾讯云"
 markNameMap["lib/armeabi/libshell-super.2020.so"]= "腾讯云"
 markNameMap["lib/armeabi/libshell-super.2021.so"]="腾讯云"
 markNameMap["assets/libshellx-super.2021.so"]="腾讯云"
+markNameMap["lib/armeabi-v7a/libxgVipSecurity.so"]= "腾讯乐固（VMP）"
+markNameMap["lib/arm64-v8a/libxgVipSecurity.so"]= "腾讯乐固（VMP）"
 
 markNameMap["libtosprotection.armeabi.so"]= "腾讯御安全"
 markNameMap["libtosprotection.armeabi-v7a.so"]= "腾讯御安全"
