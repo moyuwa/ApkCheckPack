@@ -82,12 +82,12 @@ def check_jiagu(filename):
             # print(zippath)
             for mark in markNameMap.keys():
                 if mark in zippath:
-                    print(u"检测到 【{}】 加固\n匹配特征:{}->{}".format(markNameMap[mark], zippath, mark))
+                    print(u"检测到 【{}】 加固\n匹配特征:{}->{}\n".format(markNameMap[mark], zippath, mark))
                     return
 
 
 if __name__ == '__main__':
-    print(u'基于 "ApkScan-PKID查壳工具" 的规则 添加\修改 by 6time')
+    print(u'基于 "ApkScan-PKID查壳工具" 的规则 添加\修改 by 6time\n\n\n')
     help = ("""目前支持的加固厂商：
         娜迦、梆梆、爱加密、通付盾、360加固、
         百度加固、阿里加固、腾讯加固、 网易易盾
