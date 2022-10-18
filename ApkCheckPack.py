@@ -174,17 +174,16 @@ packs = """{
     "mix.dex",
     "liblegudb.so",
     "libshella",
-    "mixz.dex"
+    "mixz.dex",
+    "libshel1x"
   ],
   "腾讯乐固": [
     "libshellx"
   ],
   "腾讯乐固（VMP）": [
     "lib/arm64-v8a/libxgVipSecurity.so",
-    "lib/armeabi-v7a/libxgVipSecurity.so"
-  ],
-  "腾讯乐固（日版）": [
-    "libshel1x"
+    "lib/armeabi-v7a/libxgVipSecurity.so",
+    "libxgVipSecurity.so"
   ],
   "腾讯云": [
     "assets/libshellx-super.2021.so",
@@ -262,17 +261,13 @@ packs = """{
     "libmobisec.so",
     "libsgmain.so",
     "libzuma.so",
-    "libzumadata.so"
-  ],
-  "阿重聚安全": [
+    "libzumadata.so",
     "libdemolishdata.so",
     "libpreverify1.so",
     "libsgsecuritybody.so"
   ],
   "顶像科技": [
-    "libx3g.so"
-  ],
-  "顶象技术": [
+    "libx3g.so",
     "lib/armeabi/libx3g.so"
   ]
 }"""
