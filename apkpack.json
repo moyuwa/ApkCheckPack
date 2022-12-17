@@ -2,12 +2,9 @@
   "360加固": [
     "assets/.appkey",
     "assets/libjiagu.so",
-    "libjiagu.so",
     "libjiagu_art.so",
     "libjiagu_x86.so",
     "libprotectClass.so",
-    ".appkey",
-    "1ibjgdtc.so",
     "libjgdtc.so",
     "libjgdtc_a64.so",
     "libjgdtc_art.so",
@@ -15,26 +12,21 @@
     "libjgdtc_x86.so",
     "libjiagu_a64.so",
     "libjiagu_ls.so",
-    "libjiagu_x64.so"
+    "libjiagu_x64.so",
+    "libSafeManageService.so"
   ],
   "APKProtect": [
     "libAPKProtect.so"
   ],
-  "UU安全": [
-    "libuusafe.jar.so",
-    "libuusafe.so",
-    "libuusafeempty.so",
+  "UU安全加固": [
     "assets/libuusafe.jar.so",
     "assets/libuusafe.so",
     "lib/armeabi/libuusafeempty.so"
   ],
-  "apktoolplus": [
+  "apktoolplus加固": [
     "assets/jiagu_data.bin",
     "assets/sign.bin",
-    "jiagu_data.bin",
-    "lib/armeabi/libapktoolplus_jiagu.so",
-    "libapktoolplus_jiagu.so",
-    "sign.bin"
+    "lib/armeabi/libapktoolplus_jiagu.so"
   ],
   "中国移动加固": [
     "assets/mogosec_classes",
@@ -45,21 +37,13 @@
     "lib/armeabi/libcmvmp.so",
     "lib/armeabi/libmogosec_dex.so",
     "lib/armeabi/libmogosec_sodecrypt.so",
-    "lib/armeabi/libmogosecurity.so",
-    "libcmvmp.so",
-    "libmogosec_dex.so",
-    "libmogosec_sodecrypt.so",
-    "mogosec_classes",
-    "mogosec_data",
-    "mogosec_dexinfo",
-    "mogosec_march"
+    "lib/armeabi/libmogosecurity.so"
   ],
   "几维安全": [
     "assets/dex.dat",
     "lib/armeabi/kdpdata.so",
     "lib/armeabi/libkdp.so",
     "lib/armeabi/libkwscmm.so",
-    "libkwscmm.so",
     "libkwscr.so",
     "libkwslinker.so"
   ],
@@ -87,14 +71,7 @@
   ],
   "梆梆安全（企业版）": [
     "libDexHelper-x86.so",
-    "libDexHelper.so",
-    "1ibDexHelper.so"
-  ],
-  "梆梆安全": [
-    "libSecShell.so",
-    "libsecexe.so",
-    "libsecmain.so",
-    "libSecShel1.so"
+    "libDexHelper.so"
   ],
   "梆梆安全（定制版）": [
     "assets/classes.jar",
@@ -103,7 +80,11 @@
   "梆梆安全（免费版）": [
     "assets/secData0.jar",
     "lib/armeabi/libSecShell-x86.so",
-    "lib/armeabi/libSecShell.so"
+    "lib/armeabi/libSecShell.so",
+    "libSecShell_art.so",
+    "libSecShel1.so",
+    "libsecexe.so",
+    "libsecmain.so"
   ],
   "海云安加固": [
     "assets/itse",
@@ -112,7 +93,6 @@
   ],
   "爱加密": [
     "assets/af.bin",
-    "assets/ijiami.ajm",
     "assets/ijm_lib/X86/libexec.so",
     "assets/ijm_lib/armeabi/libexec.so",
     "assets/signed.bin",
@@ -121,13 +101,19 @@
     "libexecmain.so"
   ],
   "爱加密企业版": [
-    "ijiami.ajm"
+    "assets/ijiami.ajm"
+  ],
+  "爱加密3代壳": [
+    "assets/ijiami3.ajm",
+    "libexecv3.so"
+  ],
+  "爱加密5代壳": [
+    "assets/IJMDal.Data",
+    "assets/libijmDataEncryption.so"
   ],
   "珊瑚灵御": [
     "assets/libreincp.so",
-    "assets/libreincp_x86.so",
-    "libreincp.so",
-    "libreincp_x86.so"
+    "assets/libreincp_x86.so"
   ],
   "瑞星加固": [
     "librsprotect.so"
@@ -136,7 +122,6 @@
     "libbaiduprotect.so",
     "assets/baiduprotect.jar",
     "assets/baiduprotect1.jar",
-    "baiduprotect1.jar",
     "lib/armeabi/libbaiduprotect.so",
     "libbaiduprotect_art.so",
     "libbaiduprotect_x86.so"
@@ -147,34 +132,33 @@
   "网易易盾": [
     "libnesec.so"
   ],
-  "腾讯": [
+  "腾讯加固": [
     "libexec.so",
     "libshell.so"
   ],
-  "腾讯加固": [
-    "lib/armeabi/mix.dex",
-    "lib/armeabi/mixz.dex",
-    "lib/armeabi/libshella-xxxx.so",
-    "lib/armeabi/libshellx-xxxx.so",
-    "tencent_stub"
-  ],
   "腾讯乐固（旧版）": [
     "libtup.so",
-    "mix.dex",
+    "lib/armeabi/mix.dex",
     "liblegudb.so",
     "libshella",
-    "mixz.dex",
-    "libshel1x"
-  ],
-  "腾讯乐固": [
-    "libshellx"
+    "lib/armeabi/mixz.dex",
+    "libshel1x",
+    "lib/armeabi/libshella-xxxx.so",
+    "lib/armeabi/libshellx-xxxx.so",
+    "tencent_stub",
+    "libshella-2.10.2.3.so",
+    "libshell.so",
+    "libshella-2.9.0.2",
+    "libshella-4.1.0.15.so",
+    "libshella-4.1.0.19.so",
+    "libshellx.so"
   ],
   "腾讯乐固（VMP）": [
     "lib/arm64-v8a/libxgVipSecurity.so",
     "lib/armeabi-v7a/libxgVipSecurity.so",
     "libxgVipSecurity.so"
   ],
-  "腾讯云": [
+  "腾讯云加固": [
     "assets/libshellx-super.2021.so",
     "lib/armeabi/libshell-super.2019.so",
     "lib/armeabi/libshell-super.2020.so",
@@ -220,7 +204,7 @@
     "lib/arm64-v8a/libBugly.so",
     "libBugly.so"
   ],
-  "蛮犀": [
+  "蛮犀加固": [
     "assets/mxsafe.config",
     "assets/mxsafe.data",
     "assets/mxsafe.jar",
@@ -230,26 +214,31 @@
   ],
   "通付盾": [
     "libNSaferOnly.so",
-    "libegis.so"
+    "libegis.so",
+    "libgeiri.so",
+    "libgeiri-x86.so"
   ],
   "阿里加固": [
-    "assets/armeabi/libfakejni.so",
     "assets/armeabi/libzuma.so",
     "assets/classes.dex.dat",
     "assets/dp.arm-v7.so.dat",
     "assets/dp.arm.so.dat",
-    "assets/libpreverify1.so",
-    "assets/libzuma.so",
-    "assets/libzumadata.so",
     "dexprotect"
   ],
+  "阿里云加固": [
+    "libdemolish.so",
+    "libdemolishdata.so"
+  ],
   "阿里聚安全": [
+    "assets/armeabi/libfakejni.so",
+    "assets/libzumadata.so",
+    "assets/libpreverify1.so",
     "aliprotect.dat",
     "libdemolish.so",
     "libfakejni.so",
     "libmobisec.so",
     "libsgmain.so",
-    "libzuma.so",
+    "assets/libzuma.so",
     "libzumadata.so",
     "libdemolishdata.so",
     "libpreverify1.so",
@@ -257,6 +246,19 @@
   ],
   "顶像科技": [
     "libx3g.so",
+    "libjni.so",
     "lib/armeabi/libx3g.so"
+  ],
+  "DexProtect加固": [
+    "dp.arm-v7.so.dat",
+    "dp.arm.so.dat"
+  ],
+  "CFCA加固": [
+    "libsecenh_a64.so",
+    "libsecenh_x86.so",
+    "my_classes.jar",
+    "libsecenh.so",
+    "libbasec.so",
+    "libbasec_x86.so"
   ]
 }
