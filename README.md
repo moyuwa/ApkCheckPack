@@ -10,13 +10,15 @@
 
 将收集到的加固特征汇总整理，最后得到约170条，保存在apkpack.json文件，有需求自取
 
-py文件方式运行需安装依赖库，有新规则修改同目录apkpack.json即可
+py文件方式运行需安装依赖库，改为读取json文件获取加固规则（v1.2）有新规则修改同目录apkpack.json就行
 
 ```
 pip3 install windnd
 ```
 
-源码仅保留GUI版本，将apk文件拖到界面，自动输出结果，GUI版本需要安装依赖库windnd，为了方便复制信息，保留了cmd黑框框，在Releases打包了一个exe（win10 x64）方便大家使用，但exe文件不会实时更新，不放心可以下载源码使用
+源码仅保留GUI版本，将apk文件拖到界面，自动输出结果，为了方便复制信息，保留了cmd黑框框
+
+GUI版本需要安装依赖库windnd，在Releases打包了一个exe（win10 x64）方便大家使用，但exe文件不会实时更新，不放心可以下载源码使用
 
 ![gui1](gui1.png)
 
