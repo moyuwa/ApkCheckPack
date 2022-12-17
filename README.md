@@ -21,6 +21,6 @@ pip3 install windnd
 ![cmd1](cmd1.png)
 
 
-
+# ps: 由于多个厂商重复加固后，apk存在多个特征，所以在一定程度上可以识别到
 
 
