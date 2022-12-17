@@ -17,6 +17,8 @@ import windnd
 with open('apkpack.json', 'r', encoding='utf-8') as f:
     markNameMap = json.load(f)
     markNameMap = dict(markNameMap)
+    pass
+
 
 def check_jiagu(filename):
     azip = zipfile.ZipFile(filename)  # 默认模式r,读
@@ -24,7 +26,7 @@ def check_jiagu(filename):
     # print(azip.filename)# 返回该zip的文件名
     jigu = u''
     for zippath in azip.namelist():
-        if 'lib' in zippath:
+        if 'lib' in zippath or 'assets' in zippath:
             # print(zippath)
             for key, value in markNameMap.items():
                 for mark in value:
