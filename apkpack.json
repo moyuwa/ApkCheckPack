@@ -57,7 +57,8 @@
   "娜迦加固": [
     "libchaosvmp.so",
     "libddog.so",
-    "libfdog.so"
+    "libfdog.so",
+    "libhdog.so"
   ],
   "娜迦加固（新版2022）": [
     "assets/maindata/fake_classes.dex",
@@ -65,6 +66,10 @@
     "lib/armeabi-v7a/libxloader.so",
     "lib/arm64-v8a/libxloader.so",
     "libxloader.so"
+  ],
+  "娜迦加固（开发者试用版-VMP）": [
+    "libvdog-x86.so",
+    "libvdog.so"
   ],
   "娜迦加固（企业版）": [
     "libedog.so"
@@ -260,5 +265,20 @@
     "libsecenh.so",
     "libbasec.so",
     "libbasec_x86.so"
+  ],
+  "OPPO加固-oppo手机加固": [
+    "OPPOProtect.so",
+    "OPPOProtect2019.so",
+    "OPPOProtect2020.so",
+    "OPPOProtect2021.so",
+    "OPPOProtect2022.so",
+    "OPPOProtect2023.so"
+  ],
+  "OPPO加固-安全检测SDK": [
+    "libomesStdSco.so",
+    "jni/arm64-v8a/libomesStdSco.so",
+    "jni/armeabi-v7a/libomesStdSco.so",
+    "jni/x86/libomesStdSco.so",
+    "jni/x86_64/libomesStdSco.so"
   ]
 }
