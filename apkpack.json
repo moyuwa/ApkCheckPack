@@ -225,10 +225,14 @@
   ],
   "阿里加固": [
     "assets/armeabi/libzuma.so",
-    "assets/classes.dex.dat",
-    "assets/dp.arm-v7.so.dat",
-    "assets/dp.arm.so.dat",
-    "dexprotect"
+    "aliprotect.dat",
+    "assets/armeabi/libfakejni.so",
+    "assets/libzuma.so",
+    "assets/libzumadata.so",
+    "assets/libpreverify1.so",
+    "libsgmain.so",
+    "libsgsecuritybody.so",
+    "libmobisec.so"
   ],
   "阿里云加固": [
     "libdemolish.so",
@@ -255,6 +259,7 @@
     "lib/armeabi/libx3g.so"
   ],
   "DexProtect加固": [
+    "assets/classes.dex.dat",
     "dp.arm-v7.so.dat",
     "dp.arm.so.dat"
   ],
@@ -280,5 +285,9 @@
     "jni/armeabi-v7a/libomesStdSco.so",
     "jni/x86/libomesStdSco.so",
     "jni/x86_64/libomesStdSco.so"
+  ],
+  "深盾安全加固（Virbox Protector）": [
+    "ibvirbox32.so",
+    "libvirbox64.so"
   ]
 }
