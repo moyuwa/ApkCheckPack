@@ -1,0 +1,695 @@
+{
+  "360加固": {
+    "sopath": [
+      "assets/libjiagu.so"
+    ],
+    "soname": [
+      "libjiagu.so",
+      "libjgdtc.so",
+      "libjgdtc_a64.so",
+      "libjgdtc_art.so",
+      "libjgdtc_x64.so",
+      "libjgdtc_x86.so",
+      "libjiagu.so",
+      "libjiagu_a64.so",
+      "libjiagu_art.so",
+      "libjiagu_ls.so",
+      "libjiagu_x64.so",
+      "libjiagu_x86.so",
+      "libprotectClass.so",
+      "libSafeManageService.so"
+    ],
+    "other": [
+      "assets/.appkey"
+    ],
+    "soregex": [
+      "libjiagu\\_...\\.so",
+      "libjgdtc\\_...\\.so"
+    ]
+  },
+  "APKProtect": {
+    "sopath": [
+    ],
+    "soname": [
+      "libAPKProtect.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "apktoolplus": {
+    "sopath": [
+      "lib/armeabi/libapktoolplus_jiagu.so"
+    ],
+    "soname": [
+      "libapktoolplus_jiagu.so"
+    ],
+    "other": [
+      "assets/jiagu_data.bin",
+      "assets/sign.bin"
+    ],
+    "soregex": [
+    ]
+  },
+  "CFCA加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libbasec.so",
+      "libbasec_x86.so",
+      "libsecenh.so",
+      "libsecenh_a64.so",
+      "libsecenh_x86.so"
+    ],
+    "other": [
+      "my_classes.jar"
+    ],
+    "soregex": [
+
+    ]
+  },
+  "DexProtect加固": {
+    "sopath": [
+    ],
+    "soname": [
+    ],
+    "other": [
+      "assets/classes.dex.dat",
+      "dp.arm-v7.so.dat",
+      "dp.arm.so.dat"
+    ],
+    "soregex": [
+    ]
+  },
+  "OPPO应用加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "OPPOProtect.so",
+      "OPPOProtect2019.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "OPPOProtect\\d\\d\\d\\d\\.so"
+    ]
+  },
+  "OPPO安全检测SDK": {
+    "sopath": [
+      "jni/arm64-v8a/libomesStdSco.so",
+      "jni/armeabi-v7a/libomesStdSco.so",
+      "jni/x86/libomesStdSco.so",
+      "jni/x86_64/libomesStdSco.so"
+    ],
+    "soname": [
+      "libomesStdSco.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "UU安全加固": {
+    "sopath": [
+      "assets/libuusafe.jar.so",
+      "assets/libuusafe.so",
+      "lib/armeabi/libuusafeempty.so"
+    ],
+    "soname": [
+      "libuusafe.jar.so",
+      "libuusafe.so",
+      "libuusafeempty.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "中国移动加固": {
+    "sopath": [
+      "lib/armeabi/libcmvmp.so",
+      "lib/armeabi/libmogosec_dex.so",
+      "lib/armeabi/libmogosec_sodecrypt.so",
+      "lib/armeabi/libmogosecurity.so"
+    ],
+    "soname": [
+      "libcmvmp.so",
+      "libmogosec_dex.so",
+      "libmogosec_sodecrypt.so",
+      "libmogosecurity.so",
+      "ibmogosecurity.so"
+    ],
+    "other": [
+      "assets/mogosec_classes",
+      "assets/mogosec_data",
+      "assets/mogosec_dexinfo",
+      "assets/mogosec_march"
+    ],
+    "soregex": [
+    ]
+  },
+  "几维安全": {
+    "sopath": [
+      "lib/armeabi/kdpdata.so",
+      "lib/armeabi/libkdp.so",
+      "lib/armeabi/libkwscmm.so"
+    ],
+    "soname": [
+      "kdpdata.so",
+      "libkdp.so",
+      "libkwscmm.so",
+      "libkwscr.so",
+      "libkwslinker.so"
+    ],
+    "other": [
+      "assets/dex.dat"
+    ],
+    "soregex": [
+    ]
+  },
+  "启明星辰": {
+    "sopath": [
+    ],
+    "soname": [
+      "libvenSec.so",
+      "libvenustech.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "娜迦加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libchaosvmp.so",
+      "libddog.so",
+      "libfdog.so",
+      "libhdog.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "lib.dog\\.so"
+    ]
+  },
+  "娜迦加固（企业版）": {
+    "sopath": [
+    ],
+    "soname": [
+      "libedog.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "娜迦加固（开发者试用版-VMP）": {
+    "sopath": [
+    ],
+    "soname": [
+      "libvdog-x86.so",
+      "libvdog.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "libvdog\\-...\\.so"
+    ]
+  },
+  "娜迦加固（新版2022）": {
+    "sopath": [
+      "lib/armeabi/libxloader.so",
+      "lib/armeabi-v7a/libxloader.so",
+      "lib/arm64-v8a/libxloader.so"
+    ],
+    "soname": [
+      "libxloader.so"
+    ],
+    "other": [
+      "assets/maindata/fake_classes.dex"
+    ],
+    "soregex": [
+    ]
+  },
+  "梆梆安全（企业版）": {
+    "sopath": [
+    ],
+    "soname": [
+      "libDexHelper-x86.so",
+      "libDexHelper.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "libDexHelper\\-...\\.so"
+    ]
+  },
+  "梆梆安全（免费版）": {
+    "sopath": [
+      "lib/armeabi/libSecShell-x86.so",
+      "lib/armeabi/libSecShell.so"
+    ],
+    "soname": [
+      "libSecShell_art.so",
+      "libSecShell.so",
+      "libSecShel1.so",
+      "libsecexe.so",
+      "libsecmain.so"
+    ],
+    "other": [
+      "assets/secData0.jar"
+    ],
+    "soregex": [
+    ]
+  },
+  "梆梆安全（定制版）": {
+    "sopath": [
+      "lib/armeabi/DexHelper.so"
+    ],
+    "soname": [
+      "DexHelper.so"
+    ],
+    "other": [
+      "assets/classes.jar"
+    ],
+    "soregex": [
+    ]
+  },
+  "海云安加固": {
+    "sopath": [
+      "lib/armeabi/libitsec.so"
+    ],
+    "soname": [
+      "libitsec.so"
+    ],
+    "other": [
+      "assets/itse"
+    ],
+    "soregex": [
+    ]
+  },
+  "深盾安全加固（Virbox Protector）": {
+    "sopath": [
+    ],
+    "soname": [
+      "ibvirbox32.so",
+      "libvirbox64.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "libvirbox..\\.so"
+    ]
+  },
+  "爱加密": {
+    "sopath": [
+      "assets/ijm_lib/armeabi/libexec.so",
+      "assets/ijm_lib/X86/libexec.so",
+      "lib/armeabi/libexecmain.so"
+    ],
+    "soname": [
+      "libexecmain.so",
+      "libexec.so"
+    ],
+    "other": [
+      "assets/af.bin",
+      "assets/signed.bin",
+      "ijiami.dat"
+    ],
+    "soregex": [
+    ]
+  },
+  "爱加密3代壳": {
+    "sopath": [
+    ],
+    "soname": [
+      "libexecv3.so"
+    ],
+    "other": [
+      "assets/ijiami3.ajm"
+    ],
+    "soregex": [
+    ]
+  },
+  "爱加密5代壳": {
+    "sopath": [
+      "assets/libijmDataEncryption.so"
+    ],
+    "soname": [
+      "libijmDataEncryption.so"
+    ],
+    "other": [
+      "assets/IJMDal.Data"
+    ],
+    "soregex": [
+    ]
+  },
+  "爱加密企业版": {
+    "sopath": [
+    ],
+    "soname": [
+    ],
+    "other": [
+      "assets/ijiami.ajm"
+    ],
+    "soregex": [
+    ]
+  },
+  "珊瑚灵御": {
+    "sopath": [
+      "assets/libreincp.so",
+      "assets/libreincp_x86.so"
+    ],
+    "soname": [
+      "libreincp.so",
+      "libreincp_x86.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "libreincp\\_...\\.so"
+    ]
+  },
+  "瑞星加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "librsprotect.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "百度加固": {
+    "sopath": [
+      "lib/armeabi/libbaiduprotect.so"
+    ],
+    "soname": [
+      "libbaiduprotect.so",
+      "libbaiduprotect_art.so",
+      "libbaiduprotect_x86.so"
+    ],
+    "other": [
+      "assets/baiduprotect.jar",
+      "assets/baiduprotect1.jar"
+    ],
+    "soregex": [
+    ]
+  },
+  "盛大加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libapssec.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "网易易盾": {
+    "sopath": [
+    ],
+    "soname": [
+      "libnesec.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "网秦加固（国信灵通）": {
+    "sopath": [
+    ],
+    "soname": [
+      "libnqshield.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "腾讯Bugly": {
+    "sopath": [
+      "lib/arm64-v8a/libBugly.so"
+    ],
+    "soname": [
+      "libBugly.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "腾讯乐固（VMP）": {
+    "sopath": [
+      "lib/arm64-v8a/libxgVipSecurity.so",
+      "lib/armeabi-v7a/libxgVipSecurity.so"
+    ],
+    "soname": [
+      "libxgVipSecurity.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "腾讯乐固（旧版）": {
+    "sopath": [
+      "lib/armeabi/libshella-xxxx.so",
+      "lib/armeabi/libshellx-xxxx.so"
+    ],
+    "soname": [
+      "liblegudb.so",
+      "libshel1x.so",
+      "libshell.so",
+      "libshella-2.10.2.3.so",
+      "libshella-2.9.0.2.so",
+      "libshella-4.1.0.15.so",
+      "libshella-4.1.0.19.so",
+      "libshella.so",
+      "libshellx.so",
+      "libtup.so"
+    ],
+    "other": [
+      "lib/armeabi/mix.dex",
+      "lib/armeabi/mixz.dex",
+      "tencent_stub"
+    ],
+    "soregex": [
+      "libshella\\-\\d+\\.\\d+\\.\\d+\\.\\d+\\.so"
+    ]
+  },
+  "腾讯云加固": {
+    "sopath": [
+      "assets/libshellx-super.2021.so",
+      "lib/armeabi/libshell-super.2019.so",
+      "lib/armeabi/libshell-super.2020.so",
+      "lib/armeabi/libshell-super.2021.so"
+    ],
+    "soname": [
+      "libshell-super.2019.so",
+      "libshellx-super.2021.so"
+    ],
+    "other": [
+      "tencent_sub"
+    ],
+    "soregex": [
+      "libshellx\\-super\\.\\d+\\.so",
+      "libshell\\-super\\.\\d+\\.so"
+    ]
+  },
+  "腾讯云移动应用安全": {
+    "sopath": [
+    ],
+    "soname": [
+    ],
+    "other": [
+      "0000000lllll.dex",
+      "00000olllll.dex",
+      "000O00ll111l.dex",
+      "00O000ll111l.dex",
+      "0OO00l111l1l",
+      "o0oooOO0ooOo.dat"
+    ],
+    "soregex": [
+    ]
+  },
+  "腾讯云移动应用安全（腾讯御安全）": {
+    "sopath": [
+    ],
+    "soname": [
+      "libBugly-yaq.so",
+      "libshell-super.2019.so",
+      "libshellx-super.2019.so",
+      "libzBugly-yaq.so"
+    ],
+    "other": [
+      "000000011111.dex",
+      "000000111111.dex",
+      "000001111111",
+      "00000o11111.dex",
+      "o0ooo000oo0o.dat",
+      "t86",
+      "tosprotection",
+      "tosversion"
+    ],
+    "soregex": [
+    ]
+  },
+  "腾讯加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libshell.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "腾讯手游加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libtprt.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "腾讯御安全": {
+    "sopath": [
+      "assets/libtosprotection.armeabi-v7a.so",
+      "assets/libtosprotection.armeabi.so",
+      "assets/libtosprotection.x86.so",
+      "lib/armeabi/libtest.so",
+      "lib/armeabi/libTmsdk-xxx-mfr.so"
+    ],
+    "soname": [
+      "libtosprotection.armeabi-v7a.so",
+      "libtosprotection.armeabi.so",
+      "libtosprotection.x86.so"
+    ],
+    "other": [
+      "assets/tosversion"
+    ],
+    "soregex": [
+      "libtosprotection\\..+\\.so"
+    ]
+  },
+  "蛮犀加固": {
+    "sopath": [
+      "assets/mxsafe/arm64-v8a/libdSafeShell.so",
+      "assets/mxsafe/x86_64/libdSafeShell.so"
+    ],
+    "soname": [
+      "libdSafeShell.so"
+    ],
+    "other": [
+      "assets/mxsafe.config",
+      "assets/mxsafe.data",
+      "assets/mxsafe.jar"
+    ],
+    "soregex": [
+    ]
+  },
+  "通付盾": {
+    "sopath": [
+    ],
+    "soname": [
+      "libNSaferOnly.so",
+      "libegis.so",
+      "libgeiri.so",
+      "libgeiri-x86.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "阿里云加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libdemolish.so",
+      "libdemolishdata.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "阿里加固": {
+    "sopath": [
+      "assets/armeabi/libzuma.so",
+      "assets/libpreverify1.so",
+      "assets/libzuma.so",
+      "assets/libzumadata.so"
+    ],
+    "soname": [
+      "libzuma.so",
+      "libpreverify1.so",
+      "libmobisec.so",
+      "libsgmain.so",
+      "libsgsecuritybody.so"
+    ],
+    "other": [
+      "aliprotect.dat"
+    ],
+    "soregex": [
+    ]
+  },
+  "阿里聚安全": {
+    "sopath": [
+      "assets/armeabi/libfakejni.so",
+      "assets/libpreverify1.so",
+      "assets/libzuma.so",
+      "assets/libzumadata.so"
+    ],
+    "soname": [
+      "libdemolish.so",
+      "libdemolishdata.so",
+      "libfakejni.so",
+      "libmobisec.so",
+      "libpreverify1.so",
+      "libsgmain.so",
+      "libsgsecuritybody.so",
+      "libzumadata.so"
+    ],
+    "other": [
+      "aliprotect.dat"
+    ],
+    "soregex": [
+    ]
+  },
+  "顶像科技": {
+    "sopath": [
+      "lib/armeabi/libx3g.so"
+    ],
+    "soname": [
+      "libx3g.so",
+      "libjni.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
+  "未知厂商": {
+    "sopath": [
+    ],
+    "soname": [
+      "libapk-protect.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  }
+}
