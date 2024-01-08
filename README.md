@@ -22,7 +22,7 @@
 
 改用go语言实现，规则也集成到单exe使用更方便
 
-到releases下载编译好的exe（仅windows版本），后面跟文件或文件夹执行（已放弃GUI版本）
+到releases下载编译好的文件，后面跟文件或文件夹执行（已放弃GUI版本）
 
 ![gui1](run1.png)
 
