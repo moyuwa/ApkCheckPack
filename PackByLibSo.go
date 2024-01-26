@@ -30,7 +30,7 @@ func PackByLibSo(apkpath string) bool {
 			//fmt.Println("Sopath:", s)
 			for _, file := range apkReader.File {
 				if file.Name == s {
-					fmt.Printf("Sopath %s->%s\n", key, file.Name)
+					fmt.Printf("发现加固特征 Sopath  %s->%s\n", key, file.Name)
 				}
 			}
 		}
@@ -38,7 +38,7 @@ func PackByLibSo(apkpath string) bool {
 			//fmt.Println("Soname:", s)
 			for _, file := range apkReader.File {
 				if strings.Contains(file.Name, s) {
-					fmt.Printf("Soname %s->%s\n", key, file.Name)
+					fmt.Printf("发现加固特征 Soname  %s->%s\n", key, file.Name)
 				}
 			}
 		}
@@ -46,7 +46,7 @@ func PackByLibSo(apkpath string) bool {
 			//fmt.Println("Other:", s)
 			for _, file := range apkReader.File {
 				if strings.Contains(file.Name, s) {
-					fmt.Printf("Other %s->%s\n", key, file.Name)
+					fmt.Printf("发现加固特征 Other   %s->%s\n", key, file.Name)
 				}
 			}
 		}
@@ -55,7 +55,7 @@ func PackByLibSo(apkpath string) bool {
 			for _, file := range apkReader.File {
 				re := regexp.MustCompile(s)
 				if re.MatchString(file.Name) {
-					fmt.Printf("Soregex %s->%s\n", key, file.Name)
+					fmt.Printf("发现加固特征 Soregex %s->%s\n", key, file.Name)
 				}
 			}
 		}
