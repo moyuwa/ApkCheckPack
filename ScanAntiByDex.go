@@ -80,6 +80,19 @@ var emulatorStrings = []string{
 	"/dev/qemu_trace",
 }
 
+// 反调试检测
+var DebugStrings = []string{
+	"checkFridaRunningProcesses",          //getSystemService("activity").getRunningServices(300)
+	"checkRunningProcesses",               //"frida-server"、"fridaserver"
+	"checkRunningServices",                //supersu、superuser进程名检测
+	"threadCpuTimeNanos",                  // cpu计算时间差检测是否被调试
+	"TamperingWithJavaRuntime",            //篡改Java运行时
+	"com.android.internal.os.ZygoteInit",  //篡改Java运行时
+	"com.saurik.substrate.MS$2",           //篡改Java运行时
+	"de.robv.android.xposed.XposedBridge", //篡改Java运行时
+	"detectBypassSSL",
+}
+
 func ScanDexAnti(dexData []byte, filePath string) {
 	// 搜索dex文件中是否包含root检测特征字符串
 	for _, str := range rootstringsCommonpaths {
@@ -93,6 +106,13 @@ func ScanDexAnti(dexData []byte, filePath string) {
 		if bytes.Contains(dexData, []byte(str)) {
 			fmt.Printf("发现模拟器检测特征 [dex]: %s->%s\n", str, filePath)
 			break
+		}
+	}
+	// 搜索dex文件中是否包含运行篡改检测特征函数
+	for _, str := range DebugStrings {
+		if bytes.Contains(dexData, []byte(str)) {
+			fmt.Printf("发现反调试检测特征 [dex]: %s->%s\n", str, filePath)
+			//break //因为包含了反调试、反sslbypass、反java运行篡改 不做直接跳出
 		}
 	}
 }
