@@ -26,7 +26,7 @@
 
 ![gui1](run1.png)
 
-![gui1](run2.png)
+![gui2](run2.png)
 
 支持的功能
 
@@ -34,3 +34,9 @@
     √ 校验签名：校验V2签名，判断是否存在Janus漏洞
     √ 密钥泄露：扫描Apk文件内容，匹配是否有密钥字符串
     √ 反环境检测：扫描Dex文件搜索是否有Root、模拟器、反调试检测
+
+使用参数-s=true（默认false）开启全文件硬编码信息扫描
+
+    ApkCheckPack.exe -s=false -f test.apk
+
+![gui3](run3.png)
