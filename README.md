@@ -35,6 +35,6 @@
 
 使用参数-s=true（默认false）开启全文件硬编码信息扫描
 
-    ApkCheckPack.exe -s=false -f test.apk
+    ApkCheckPack.exe -s=true -f test.apk
 
 ![gui3](run3.png)
