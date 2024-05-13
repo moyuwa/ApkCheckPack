@@ -22,8 +22,6 @@
 
 改用go语言实现，规则也集成到单exe使用更方便，到releases下载编译好的文件（已放弃GUI版本）
 
-![gui1](run1.png)
-
 ![gui2](run2.png)
 
 支持的功能
