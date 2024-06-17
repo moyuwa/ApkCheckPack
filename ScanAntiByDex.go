@@ -75,9 +75,10 @@ var emulatorStrings = []string{
 	"goldfish",
 	"android-test",
 	"000000000000000",
-	"/dev/socket/qemud",
-	"/dev/qemu_pipe",
+	"/dev/socket/qemud",//hasQemuSocket
+	"/dev/qemu_pipe",//hasQemuPipe
 	"/dev/qemu_trace",
+	"ro.kernel.qemu",//getEmulatorQEMUKernel
 }
 
 // 反调试检测
