@@ -74,10 +74,16 @@ func scanAPKFolder(folderPath string) error {
 }
 
 func scanAPKFile(filePath string) error {
-	//fmt.Printf("scanAPKFile")
+	fmt.Printf("scanAPKFile")
+
 	verifyApk(filePath)
+
 	PackByLibSo(filePath)
+
 	ScanAPKAnti(filePath)
+
+	SDKByLibSo(filePath)
+
 	if *arg_scanhardcode {
 		ScanAPKHardCoded(filePath) //匹配规则待调整
 	}
