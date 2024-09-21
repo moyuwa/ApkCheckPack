@@ -20,15 +20,9 @@
 
     soregex 对有版本号的特征so库，使用正则匹配
 
-改用go语言实现，规则也集成到单exe使用更方便
+改用go语言实现，规则也集成到单exe使用更方便，到releases下载编译好的文件（已放弃GUI版本）
 
-到releases下载编译好的文件，后面跟文件或文件夹执行（已放弃GUI版本）
-
-![gui1](img/run1.png)
-
-![gui2](img/run2.png)
-
-![gui3](img/3SDK.png)
+![gui2](run2.png)
 
 支持的功能
 
@@ -36,10 +30,11 @@
     √ 校验签名：校验V2签名，判断是否存在Janus漏洞
     √ 密钥泄露：扫描Apk文件内容，匹配是否有密钥字符串
     √ 反环境检测：扫描Dex文件搜索是否有Root、模拟器、反调试检测
-    √ 开发框架扫描：扫描特征so库名，判断是否有第三方SDK
 
-使用参数-s=true（默认false）开启全文件硬编码信息扫描
+使用参数-s=true（默认false）开启全文件硬编码信息扫描，-f参数指定apk文件或文件夹
 
-    ApkCheckPack.exe -s=false -f test.apk
+    ApkCheckPack.exe -s=true -f test.apk
 
-![gui3](img/run3.png)
+![gui3](run3.png)
+
+![gui1](run1.png)
