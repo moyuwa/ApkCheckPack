@@ -8,16 +8,14 @@
 
 由于变动较大，工具更名为ApkCheckPack，大概是加固规则最全的开源工具：）
 
-将能收集到的加固特征汇总整理，支持40个厂商的加固检测，保存在apkpackdata.json文件，有需求自取
-
-规则更新时间 20231227
+将能收集到的加固特征汇总整理，支持40个厂商的加固检测，保存在apkpackdata.json文件，格式如下，有需求自取
 
     sopath 绝对路径的特征so
-
+    
     soname 仅特征so文件名
-
+    
     other 其他特征文件、字符串
-
+    
     soregex 对有版本号的特征so库，使用正则匹配
 
 改用go语言实现，规则也集成到单exe使用更方便
@@ -43,3 +41,5 @@
     ApkCheckPack.exe -s=false -f test.apk
 
 ![gui3](img/run3.png)
+
+加固规则更新时间 20231227，第三方SDK规则更新时间 20240922
