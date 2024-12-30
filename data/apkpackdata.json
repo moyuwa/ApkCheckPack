@@ -681,6 +681,21 @@
     "soregex": [
     ]
   },
+  "google(play)加固": {
+    "sopath": [
+      "lib/arm64-v8a/libpairipcore.so",
+      "lib/armeabi-v7a/libpairipcore.so",
+      "lib/x86_64/libpairipcore.so",
+      "lib/x86/libpairipcore.so"
+    ],
+    "soname": [
+      "libpairipcore.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+    ]
+  },
   "未知厂商": {
     "sopath": [
     ],

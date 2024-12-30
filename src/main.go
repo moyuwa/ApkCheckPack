@@ -74,9 +74,9 @@ func scanAPKFolder(folderPath string) error {
 }
 
 func scanAPKFile(filePath string) error {
-	fmt.Printf("scanAPKFile")
+	//fmt.Printf("scanAPKFile")
 
-	verifyApk(filePath)
+	//verifyApk(filePath) //20241230 临时取消签名验证 减小程序体积
 
 	PackByLibSo(filePath)
 

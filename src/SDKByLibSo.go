@@ -36,19 +36,21 @@ func SDKByLibSo(apkpath string) bool {
 	}
 
 	//输出匹配结果 先格式化再输出
-	fmt.Printf("\n===扫描第三方SDK特征结果===\n\n")
+	if sdksolist != nil {
+		fmt.Printf("\n===扫描第三方SDK特征结果===\n\n")
 
-	var pftstr []string
-	for _, value := range sdksolist {
-		//fmt.Printf("%s, %s->%s", value.Team, value.Label, value.Soname)
-		pftstr = append(pftstr, fmt.Sprintf("%s, %s->%s", value.Team, value.Label, value.Soname))
-	}
+		var pftstr []string
+		for _, value := range sdksolist {
+			//fmt.Printf("%s, %s->%s", value.Team, value.Label, value.Soname)
+			pftstr = append(pftstr, fmt.Sprintf("%s, %s->%s", value.Team, value.Label, value.Soname))
+		}
 
-	sort.Strings(pftstr)
-	for _, value := range pftstr {
-		fmt.Printf("%s\n", value)
+		sort.Strings(pftstr)
+		for _, value := range pftstr {
+			fmt.Printf("%s\n", value)
+		}
+		fmt.Printf("\n=======================\n")
 	}
-	fmt.Printf("\n=======================\n")
 
 	return true
 }
