@@ -586,10 +586,13 @@
   "蛮犀加固": {
     "sopath": [
       "assets/mxsafe/arm64-v8a/libdSafeShell.so",
-      "assets/mxsafe/x86_64/libdSafeShell.so"
+      "assets/mxsafe/x86_64/libdSafeShell.so",
+      "assets/mx/lib/arm64-v8a/libmxacc.so",
+      "assets/mx/lib/x86_64/libmxacc.so"
     ],
     "soname": [
-      "libdSafeShell.so"
+      "libdSafeShell.so",
+      "libmxacc.so"
     ],
     "other": [
       "assets/mxsafe.config",
@@ -694,6 +697,38 @@
     "other": [
     ],
     "soregex": [
+    ]
+  },
+  "LIAPP加固": {
+    "sopath": [
+    ],
+    "soname": [
+    ],
+    "other": [
+      "assets/LIAPP.ini",
+      "assets/pkgInfo.txt"
+    ],
+    "soregex": [
+      "com\\..+UnityDataAssetPack.+\\.apk$",
+      "com\\..+AddressablesAssetPack.+\\.apk$"
+    ]
+  },
+  "appguard.us加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libloader.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "config\\..+\\.apk$"
+
+    ],
+    "dexbackup": [
+      "// 临时记录 加固后的入口定位类名",
+      "// invoke-super {p0}, Landroid/app/Application;->onCreate()V",
+      "// Lcom/inca/security/Proxy/AppGuardFrontApplication;->i"
     ]
   },
   "未知厂商": {

@@ -1,56 +1,93 @@
 package main
 
 import (
+	"archive/zip"
 	"fmt"
-	"github.com/avast/apkparser"
-	"os"
+	"path"
 	"sort"
 	"strings"
 )
 
-func SDKByLibSo(apkpath string) bool {
+type SDKSoInfo struct {
+	Team   string
+	Label  string
+	Soname string
+}
+
+var SDKList struct {
+	Team   string
+	Label  string
+	Soname string
+}
+
+var (
+	checkSDK = true
+	quiet    = false
+)
+
+func SDKByLibSo(apkReader *zip.Reader) bool {
+	if !checkSDK {
+		return false
+	}
+
 	//获取SDK特征json
-	apkmap := GetApkSDKMap()
-	if apkmap == nil {
+	apksdkjsons := GetApkSDKMap()
+	if apksdkjsons == nil {
 		fmt.Printf("获取第三方SDK特征异常\n")
 		return false
 	}
-	//解析apk文件
-	apkReader, err := apkparser.OpenZip(apkpath)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return false
-	}
-	defer apkReader.Close()
 
-	// 将特征存储到数组，排序后输出
-	var sdksolist []ApkSDKJson
-	for _, value := range apkmap {
-		for _, file := range apkReader.File {
-			if strings.Contains(file.Name, value.Soname) {
-				//fmt.Printf("发现SDK特征 Soname [%s]->%s\n", value.Team, file.Name)
-				sdksolist = append(sdksolist, value)
+	var sdksolist []SDKSoInfo
+	
+	for _, file := range apkReader.File {
+		if path.Ext(file.Name) == ".so" {
+			for _, sdk := range apksdkjsons {
+				if strings.Contains(file.Name, sdk.Soname) {
+					sdksolist = append(sdksolist, SDKSoInfo{
+						Team:   sdk.Team,
+						Label:  sdk.Label, 
+						Soname: file.Name, // sdk.Soname
+					})
+				}
 			}
 		}
-
 	}
 
-	//输出匹配结果 先格式化再输出
-	if sdksolist != nil {
-		fmt.Printf("\n===扫描第三方SDK特征结果===\n\n")
+	if len(sdksolist) > 0 {
+		outputSDKResults(sdksolist)
+		return true
+	}
+	return false
+}
 
-		var pftstr []string
-		for _, value := range sdksolist {
-			//fmt.Printf("%s, %s->%s", value.Team, value.Label, value.Soname)
-			pftstr = append(pftstr, fmt.Sprintf("%s, %s->%s", value.Team, value.Label, value.Soname))
-		}
-
-		sort.Strings(pftstr)
-		for _, value := range pftstr {
-			fmt.Printf("%s\n", value)
-		}
-		fmt.Printf("\n=======================\n")
+func outputSDKResults(sdksolist []SDKSoInfo) {
+	if !quiet {
+		fmt.Printf("\n===================== 第三方SDK特征扫描结果 =====================\n")
 	}
 
-	return true
+
+	teamMap := make(map[string][]string)
+	var teams []string
+	
+	for _, value := range sdksolist {
+		team := value.Team
+		if _, exists := teamMap[team]; !exists {
+			teams = append(teams, team)
+		}
+		teamMap[team] = append(teamMap[team], fmt.Sprintf("    %s -> %s", value.Label, value.Soname))
+	}
+	
+	sort.Strings(teams)
+	
+	for _, team := range teams {
+		fmt.Printf("\n[%s]\n", team)
+		sort.Strings(teamMap[team])
+		for _, item := range teamMap[team] {
+			fmt.Println(item)
+		}
+	}
+
+	if !quiet {
+		// fmt.Printf("\n================================================================\n")
+	}
 }
