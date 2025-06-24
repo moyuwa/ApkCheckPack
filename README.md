@@ -32,7 +32,7 @@ English Please look: ./README_EN.md
 
 到releases下载编译好的文件，后面跟文件或文件夹执行（已放弃GUI版本）
 
-![gui](20250624.png)
+![gui](fun.png)
 
 使用参数-hardcode开启全文件硬编码信息扫描，同时注意默认最大扫500MB内部文件
 

@@ -32,7 +32,7 @@ Implement in Go language instead, and integrate the rules into a single exe for 
 
 Download the compiled file from releases and execute it following the file or folder (GUI version abandoned)
 
-![gui](20250624.png)
+![gui](fun.png)
 
 Use the parameter - hardcode to enable full file hard coded Information scanning, and pay attention to the default maximum scanning of 500MB internal files
 
