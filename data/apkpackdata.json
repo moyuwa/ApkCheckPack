@@ -153,14 +153,24 @@
     "sopath": [
       "lib/armeabi/kdpdata.so",
       "lib/armeabi/libkdp.so",
-      "lib/armeabi/libkwscmm.so"
+      "lib/armeabi/libkwscmm.so",
+	  "lib/arm64-v8a/libkadp.so",
+	  "lib/arm64-v8a/libkiwi_dumper.so",
+	  "lib/arm64-v8a/libkiwicrash.so",
+	  "lib/arm64-v8a/libKwProtectSDK.so",
+	  "lib/arm64-v8a/libkwdataenc.so"
     ],
     "soname": [
       "kdpdata.so",
       "libkdp.so",
       "libkwscmm.so",
       "libkwscr.so",
-      "libkwslinker.so"
+      "libkwslinker.so",
+	  "libkadp.so",
+	  "libkiwi_dumper.so",
+	  "libkiwicrash.so",
+	  "libKwProtectSDK.so",
+	  "libkwdataenc.so"
     ],
     "other": [
       "assets/dex.dat"
