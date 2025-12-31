@@ -6,7 +6,7 @@
 
 English Please look: ./README_EN.md
 
-20250928 本季度无更新
+202501231 happy new year,最近比较忙,欠一次更新
 
 工具只是辅助，新方式和厂商不断出现，特征查找方式可能遗漏，切勿完全依赖
 
