@@ -6,18 +6,17 @@
 
 English Please look: ./README_EN.md
 
-202501231 happy new year,最近比较忙,欠一次更新
-
 工具只是辅助，新方式和厂商不断出现，特征查找方式可能遗漏，切勿完全依赖
 
 由于变动较大，工具更名为ApkCheckPack，大概是加固规则最全的开源工具：）
 
-将能收集到的加固特征汇总整理，支持40个厂商的加固检测，保存在apkpackdata.json文件，格式如下，有需求自取（加固规则更新时间 20250624，第三方SDK规则更新时间 20240922）
+将能收集到的加固特征汇总整理，支持40+厂商的加固检测，保存在apkpackdata.json文件，格式如下，有需求自取（加固规则更新时间 20260111，第三方SDK规则更新时间 20260111）
 
     sopath 绝对路径的特征so
     soname 仅特征so文件名
     other 其他特征文件、字符串
     soregex 对有版本号的特征so库，使用正则匹配
+    jclass dex内的java编译后代码，字符串匹配
 
 支持的功能
 
@@ -25,7 +24,7 @@ English Please look: ./README_EN.md
     √ 反环境检测：扫描Dex文件搜索是否有Root、模拟器、反调试检测
     √ 开发框架扫描：扫描特征so库名，判断是否有第三方SDK
     √ 反代理检测：扫描代理检测类名，判断是否有反代理
-    √ 内嵌APK扫描：某些加固会在APK内嵌多个APK文件
+    √ 内嵌APK扫描：某些XAPK内嵌多个APK文件存在加固
     √ 证书文件扫描：按后缀扫描证书文件并输出信息
     X （临时取消）校验签名：校验V2签名，判断是否存在Janus漏洞
     √ 密钥泄露：扫描Apk文件内容，匹配是否有密钥字符串
@@ -33,6 +32,8 @@ English Please look: ./README_EN.md
 改用go语言实现，规则也集成到单exe使用更方便
 
 到releases下载编译好的文件，后面跟文件或文件夹执行（已放弃GUI版本）
+
+`ApkCheckPack.exe -f test.apk`
 
 ![gui](fun.png)
 
