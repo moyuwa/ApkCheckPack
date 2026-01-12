@@ -42,14 +42,14 @@ func SDKByLibSo(apkReader *zip.Reader) bool {
 	for _, file := range apkReader.File {
 		if path.Ext(file.Name) == ".so" {
 			for _, sdk := range apksdkjsons {
-				if strings.Contains(file.Name, sdk.Soname) {
-					sdksolist = append(sdksolist, SDKSoInfo{
-						Team:   sdk.Team,
-						Label:  sdk.Label, 
-						Soname: file.Name, // sdk.Soname
-					})
-				}
+			if strings.Contains(file.Name, sdk.Soname) {
+				sdksolist = append(sdksolist, SDKSoInfo{
+					Team:   sdk.GetTeam(),
+					Label:  sdk.GetLabel(), 
+					Soname: file.Name, // sdk.Soname
+				})
 			}
+		}
 		}
 	}
 
@@ -61,10 +61,19 @@ func SDKByLibSo(apkReader *zip.Reader) bool {
 }
 
 func outputSDKResults(sdksolist []SDKSoInfo) {
-	if !quiet {
-		fmt.Printf("\n===================== 第三方SDK特征扫描结果 =====================\n")
+	// 根据是否是内嵌APK调整缩进级别
+	mainIndent := "  - "
+	secondaryIndent := "    - "
+	tertiaryIndent := "      - "
+	if isEmbeddedAPK {
+		mainIndent = "    - "
+		secondaryIndent = "      - "
+		tertiaryIndent = "        - "
 	}
-
+	
+	if !quiet {
+		fmt.Printf("\n" + mainIndent + "第三方SDK特征扫描结果")
+	}
 
 	teamMap := make(map[string][]string)
 	var teams []string
@@ -74,16 +83,16 @@ func outputSDKResults(sdksolist []SDKSoInfo) {
 		if _, exists := teamMap[team]; !exists {
 			teams = append(teams, team)
 		}
-		teamMap[team] = append(teamMap[team], fmt.Sprintf("    %s -> %s", value.Label, value.Soname))
+		teamMap[team] = append(teamMap[team], fmt.Sprintf("%s -> %s", value.Label, value.Soname))
 	}
 	
 	sort.Strings(teams)
 	
 	for _, team := range teams {
-		fmt.Printf("\n[%s]\n", team)
+		fmt.Printf("\n" + secondaryIndent + "%s", team)
 		sort.Strings(teamMap[team])
 		for _, item := range teamMap[team] {
-			fmt.Println(item)
+			fmt.Printf("\n" + tertiaryIndent + "%s", item)
 		}
 	}
 

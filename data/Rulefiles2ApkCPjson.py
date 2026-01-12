@@ -25,40 +25,86 @@ def enum_native_libs(dirpath):
 
 # 提取文件名称和内容
 def extract_filename_jsoncontent(filepath):
-    print('extract_filename_jsoncontent')
-
+    # print('extract_filename_jsoncontent')
     '''
     libMSDK.so.json
 
-    {
-        "label": "MSDK / MobileGame Software Development Kit",
-        "team": "腾讯互动娱乐",
-        "iconUrl": "",
-        "contributors": ["yfdyh000"],
-        "description": "MSDK，全称 MobileGame Software Development Kit，是增值服务部为游戏（主要为手游）提供公共组件和服务库的平台，旨在加快游戏接入各公共组件和海外开放平台。",
-        "relativeUrl": "https://docs.msdk.qq.com/"
-    }
+{
+    "data": [
+        {
+            "locale": "zh-Hans",
+            "data": {
+                "label": "腾讯游戏 MSDK",
+                "dev_team": "Tencent",
+                "rule_contributors": [
+                    "makazeu",
+                    "crrashh1542",
+                    "yfdyh000"
+                ],
+                "description": "MSDK，全称 Multi-platform Game Software Development Kit 是腾讯游戏公共组件和服务库平台，由增值服务部&公共数据平台部开发。为腾讯研发、发行的海内外游戏产品（移动、PC、主机平台）提供包括账号服务、好友关系链等必要增值服务能力接入。",
+                "source_link": "https://docs.itop.qq.com/"
+            }
+        },
+        {
+            "locale": "en",
+            "data": {
+                "label": "Tencent Game MSDK",
+                "dev_team": "Tencent",
+                "rule_contributors": [
+                    "makazeu",
+                    "crrashh1542"
+                ],
+                "description": "MSDK, short for Multi-platform Game Software Development Kit, is Tencent's public component and service library platform developed by the Value-Added Services Department & Public Data Platform Department. It provides necessary value-added service capabilities such as account services and friend relationship chains for Tencent's R&D and published game products (mobile, PC, console platforms) at home and abroad.",
+                "source_link": "https://docs.itop.qq.com/"
+            }
+        }
+    ],
+    "uuid": "51CC509E-7445-4D62-AAA4-36AC45C26A78"
+}
     '''
-
     # 提取文件名 libMSDK.so.json -> libMSDK.so
     filename = os.path.basename(filepath)
     libstr = filename.replace('.json', '')
     # 提取JSON内容
-    with open(filepath, 'r+', encoding='utf-8') as f:
+    with open(filepath, 'r', encoding='utf-8') as f:
         jsoncontent = json.load(f)
 
-    # 提取所需字段
-    # label = jsoncontent.get('label', '')
-    # team = jsoncontent.get('team', '')
-    # iconUrl = jsoncontent.get('iconUrl', '')
-    # contributors = jsoncontent.get('contributors', [])
-    # description = jsoncontent.get('description', '')
-    # relativeUrl = jsoncontent.get('relativeUrl', '')
+    # 提取多语言数据，包括label、dev_team和description
+    zh_data = {}
+    en_data = {}
+    
+    for item in jsoncontent.get('data', []):
+        locale = item.get('locale')
+        data = item.get('data', {})
+        if locale == 'zh-Hans':
+            zh_data = {
+                'label': data.get('label', ''),
+                'dev_team': data.get('dev_team', ''),
+                # 'description': data.get('description', '')
+            }
+        elif locale == 'en':
+            en_data = {
+                'label': data.get('label', ''),
+                'dev_team': data.get('dev_team', ''),
+                # 'description': data.get('description', '')
+            }
+    
+    # 构建新的JSON结构，按中英文分开，移除UUID
+    result = {
+        'soname': libstr,
+        'zh': {
+            'label': zh_data.get('label', ''),
+            'dev_team': zh_data.get('dev_team', ''),
+            # 'description': zh_data.get('description', '')
+        },
+        'en': {
+            'label': en_data.get('label', ''),
+            'dev_team': en_data.get('dev_team', ''),
+            # 'description': en_data.get('description', '')
+        }
+    }
 
-    # 加入额外字段
-    jsoncontent['soname'] = libstr
-
-    return jsoncontent
+    return result
 
 
 # 合并后写入json文件，规则转为ApkCheckPack可用数据

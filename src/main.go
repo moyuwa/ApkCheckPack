@@ -29,6 +29,9 @@ var (
 	// 扫描控制参数
 	ArgMaxSize      = flag.Int64("maxsize", 500, "单个文件最大扫描大小(MB)")
 	ArgRecursive    = flag.Bool("r", true, "是否递归扫描内嵌APK")
+	
+	// 跟踪当前是否是内嵌APK，用于调整输出缩进
+	isEmbeddedAPK bool
 )
 
 // 打印使用说明
@@ -57,6 +60,9 @@ func printUsage() {
 }
 
 func main() {
+	// 设置自定义的Usage函数
+	flag.Usage = printUsage
+	
 	// 添加帮助标志
 	helpFlag := flag.Bool("help", false, "显示帮助信息")
 	flag.Parse()
@@ -164,10 +170,10 @@ func scanEmbeddedAPKs(apkReader *zip.Reader) {
 			continue
 		}
 
-		fmt.Printf("\t发现内嵌APK文件: %s\n", file.Name)
+		fmt.Printf("\n  - [!]内嵌APK文件: %s\n", file.Name)
 		
 		if err := scanSingleEmbeddedAPK(file); err != nil {
-			fmt.Printf("\t处理内嵌APK文件 %s 失败: %v\n", file.Name, err)
+			fmt.Printf("    - 处理内嵌APK文件 %s 失败: %v\n", file.Name, err)
 		}
 	}
 }
@@ -206,30 +212,74 @@ func scanSingleEmbeddedAPK(file *zip.File) error {
 		
 		// 如果文件大小已知，打印信息
 		if fileSize > 0 {
-			fmt.Printf("\t内嵌APK大小: %.2f MB, 读取限制: %.2f MB\n", 
-				float64(fileSize)/(1024*1024), 
-				float64(sizeLimit)/(1024*1024))
+			fmt.Printf("    - 内嵌APK大小: %.2f MB\n", float64(fileSize)/(1024*1024))
+			fmt.Printf("    - 读取限制: %.2f MB\n", float64(sizeLimit)/(1024*1024))
 		}
 		
 		// 创建限制大小的读取器
 		limitReader := io.LimitReader(fileReader, sizeLimit)
 		
-		// 分块读取APK内容
-		var buffer bytes.Buffer
-		_, err := io.Copy(&buffer, limitReader)
-		if err != nil {
-			return fmt.Errorf("读取内嵌APK内容失败: %v", err)
-		}
-		
-		// 创建zip reader
-		apkData := buffer.Bytes()
-		embeddedReader, err := zip.NewReader(bytes.NewReader(apkData), int64(len(apkData)))
-		if err != nil {
-			return fmt.Errorf("解析内嵌APK失败: %v", err)
+		// 对于大文件，使用临时文件避免内存占用过高
+		// 对于小文件，直接加载到内存
+		var embeddedReader *zip.Reader
+		if sizeLimit > int64(*ArgMaxSize)*1024*1024 { // 大于用户设置的最大大小的文件使用临时文件
+			// 创建临时文件
+			tempFile, err := os.CreateTemp("", "embedded_apk_*.apk")
+			if err != nil {
+				return fmt.Errorf("创建临时文件失败: %v", err)
+			}
+			tempFileName := tempFile.Name()
+			defer func() {
+				tempFile.Close()
+				os.Remove(tempFileName) // 删除临时文件
+			}()
+			
+			// 将数据写入临时文件
+			_, err = io.Copy(tempFile, limitReader)
+			if err != nil {
+				return fmt.Errorf("写入临时文件失败: %v", err)
+			}
+			
+			// 关闭临时文件以便重新打开
+			if err := tempFile.Close(); err != nil {
+				return fmt.Errorf("关闭临时文件失败: %v", err)
+			}
+			
+			// 重新打开临时文件以获取文件句柄
+			tempFile, err = os.Open(tempFileName)
+			if err != nil {
+				return fmt.Errorf("重新打开临时文件失败: %v", err)
+			}
+			
+			// 获取临时文件信息
+			tempFileInfo, err := tempFile.Stat()
+			if err != nil {
+				return fmt.Errorf("获取临时文件信息失败: %v", err)
+			}
+			
+			// 创建zip reader
+			embeddedReader, err = zip.NewReader(tempFile, tempFileInfo.Size())
+			if err != nil {
+				return fmt.Errorf("解析内嵌APK失败: %v", err)
+			}
+		} else {
+			// 小文件直接加载到内存
+			data, err := io.ReadAll(limitReader)
+			if err != nil {
+				return fmt.Errorf("读取内嵌APK内容失败: %v", err)
+			}
+			
+			// 创建zip reader
+			embeddedReader, err = zip.NewReader(bytes.NewReader(data), int64(len(data)))
+			if err != nil {
+				return fmt.Errorf("解析内嵌APK失败: %v", err)
+			}
 		}
 		
 		// 扫描内嵌APK
+		isEmbeddedAPK = true
 		ScanAPKData(embeddedReader)
+		isEmbeddedAPK = false
 		return nil
 	}()
 	
@@ -239,10 +289,12 @@ func scanSingleEmbeddedAPK(file *zip.File) error {
 // 将APK读取到内存，传入
 func ScanAPKData(apkReader *zip.Reader) error {
 	//verifyApk(filePath) //20241230 临时取消签名验证 减小程序体积
-
+	
+	// 改为串行执行，确保结果按照预期顺序显示
+	
 	// 检测加固特征
 	PackByLibSo(apkReader)
-
+	
 	// 根据参数控制安全检测
 	if *ArgCheckRoot || *ArgCheckEmu || *ArgCheckDebug || *ArgCheckProxy {
 		ScanAPKAnti(apkReader)
@@ -263,5 +315,6 @@ func ScanAPKData(apkReader *zip.Reader) error {
 		ScanAPKCertificate(apkReader)
 	}
 	
+	fmt.Printf("\n")
 	return nil
 }

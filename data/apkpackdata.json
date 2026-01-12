@@ -153,14 +153,24 @@
     "sopath": [
       "lib/armeabi/kdpdata.so",
       "lib/armeabi/libkdp.so",
-      "lib/armeabi/libkwscmm.so"
+      "lib/armeabi/libkwscmm.so",
+	    "lib/arm64-v8a/libkadp.so",
+	    "lib/arm64-v8a/libkiwi_dumper.so",
+	    "lib/arm64-v8a/libkiwicrash.so",
+	    "lib/arm64-v8a/libKwProtectSDK.so",
+	    "lib/arm64-v8a/libkwdataenc.so"
     ],
     "soname": [
       "kdpdata.so",
       "libkdp.so",
       "libkwscmm.so",
       "libkwscr.so",
-      "libkwslinker.so"
+      "libkwslinker.so",
+	    "libkadp.so",
+	    "libkiwi_dumper.so",
+	    "libkiwicrash.so",
+	    "libKwProtectSDK.so",
+	    "libkwdataenc.so"
     ],
     "other": [
       "assets/dex.dat"
@@ -713,6 +723,18 @@
       "com\\..+AddressablesAssetPack.+\\.apk$"
     ]
   },
+  "XAPK内嵌": {
+    "sopath": [
+    ],
+    "soname": [
+    ],
+    "other": [
+    ],
+    "soregex": [
+      "config\\..+\\.apk$",
+      "com\\..+\\..+\\.apk$"
+    ]
+  },
   "appguard.us加固": {
     "sopath": [
     ],
@@ -722,13 +744,34 @@
     "other": [
     ],
     "soregex": [
-      "config\\..+\\.apk$"
-
     ],
-    "dexbackup": [
-      "// 临时记录 加固后的入口定位类名",
-      "// invoke-super {p0}, Landroid/app/Application;->onCreate()V",
-      "// Lcom/inca/security/Proxy/AppGuardFrontApplication;->i"
+    "jclass": [
+      "AppGuard$IOnLoadInformation",
+      "AppGuard$VersionInformation",
+      "Lcom/nhnent/appguard/AppGuard"
+    ]
+  },
+  "G-Presto加固": {
+    "sopath": [
+      "lib/arm64-v8a/libATG_L.so"
+    ],
+    "soname": [
+      "libATG_D.so",
+      "libATG_H.so",
+      "libATG_L.so"
+    ],
+    "other": [
+      "assets/ATG_E.sec",
+      "assets/ATG_E_x64.sec",
+      "assets/ATG_E_x86.sec",
+      "assets/ATG_E_x86_64.sec"
+    ],
+    "soregex": [
+    ],
+    "jclass": [
+      "Lcom/bishopsoft/Presto",
+      "Presto_Init",
+      "ATG_H init"
     ]
   },
   "未知厂商": {

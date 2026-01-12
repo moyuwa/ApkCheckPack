@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"sync"
 )
 
 // 定义硬编码规则分类
@@ -117,22 +118,26 @@ var hardCodeCategories = []HardCodeCategory{
 	},
 }
 
-// 获取所有硬编码规则
-func getAllHardCodedPatterns() []string {
-	var patterns []string
-	for _, category := range hardCodeCategories {
-		patterns = append(patterns, category.Patterns...)
-	}
-	return patterns
+// 正则表达式模式与类别映射结构
+type PatternCategory struct {
+	Pattern  *regexp.Regexp
+	Category string
+	PatternStr string
 }
 
-// 解析硬编码规则列表为正则表达式
-func parseHardCodedPatterns(patterns []string) []*regexp.Regexp {
-	var regexps []*regexp.Regexp
-	for _, pattern := range patterns {
-		regexps = append(regexps, regexp.MustCompile(pattern))
+// 预编译所有正则表达式并构建模式到类别的映射
+func buildPatternCategories() []PatternCategory {
+	var patternCategories []PatternCategory
+	for _, category := range hardCodeCategories {
+		for _, patternStr := range category.Patterns {
+			patternCategories = append(patternCategories, PatternCategory{
+				Pattern:  regexp.MustCompile(patternStr),
+				Category: category.Name,
+				PatternStr: patternStr,
+			})
+		}
 	}
-	return regexps
+	return patternCategories
 }
 
 // 硬编码检测结果结构
@@ -143,81 +148,104 @@ type HardCodedResult struct {
 	MatchText   string
 }
 
-// 全局变量用于收集所有硬编码检测结果
-var allHardCodedResults []HardCodedResult
-
-// 清除所有硬编码检测结果
-func clearHardCodedResults() {
-	allHardCodedResults = []HardCodedResult{}
-}
-
 // 搜索硬编码的规则
-func SearchHardCoded(dexData []byte, filePath string, patterns []*regexp.Regexp) {
-	patternList := getAllHardCodedPatterns()
-	
-	for i, pattern := range patterns {
-		matches := pattern.FindAll(dexData, -1)
+func SearchHardCoded(dexData []byte, filePath string, patternCategories []PatternCategory) []HardCodedResult {
+	var results []HardCodedResult
+	for _, pc := range patternCategories {
+		matches := pc.Pattern.FindAll(dexData, -1)
 		if len(matches) > 0 {
-			// 查找该pattern属于哪个类别
-			category := "未分类"
-			for _, cat := range hardCodeCategories {
-				for _, catPattern := range cat.Patterns {
-					if catPattern == patternList[i] {
-						category = cat.Name
-						break
-					}
-				}
-				if category != "未分类" {
-					break
-				}
-			}
-			
 			for _, match := range matches {
-				result := HardCodedResult{
+				results = append(results, HardCodedResult{
 					FilePath:  filePath,
-					Category:  category,
-					Pattern:   patternList[i],
+					Category:  pc.Category,
+					Pattern:   pc.PatternStr,
 					MatchText: string(match),
-				}
-				allHardCodedResults = append(allHardCodedResults, result)
+				})
 			}
 		}
 	}
+	return results
 }
 
 // 直接打开apk暴力搜索
 func ScanAPKHardCoded(apkReader *zip.Reader) bool {
-	// 清除之前的检测结果
-	clearHardCodedResults()
+	// 构建预编译的正则表达式类别映射
+	patternCategories := buildPatternCategories()
 	
-	patterns := parseHardCodedPatterns(getAllHardCodedPatterns())
-
-	// 读取全部文件扫描
-	totalFiles := len(apkReader.File)
-	for i, file := range apkReader.File {
-		// 显示进度
-		fmt.Printf("\r硬编码扫描进度: %d/%d", i+1, totalFiles)
-
-		fileReader, err := file.Open()
-		if err != nil {
-			fmt.Println(err)
-			continue
+	// 存储所有检测结果
+	var allResults []HardCodedResult
+	
+	// 结果通道和进度通道
+	resultsChan := make(chan []HardCodedResult, 10)
+	progressChan := make(chan int, len(apkReader.File))
+	
+	// 启动进度显示goroutine
+	go func() {
+		processed := 0
+		totalFiles := len(apkReader.File)
+		for range progressChan {
+			processed++
+			fmt.Printf("\r硬编码扫描进度: %d/%d", processed, totalFiles)
 		}
-		
-		// 使用参数控制文件大小限制
-		dexData, err := io.ReadAll(io.LimitReader(fileReader, 1024*1024*(*ArgMaxSize)))
-		fileReader.Close()
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		
-		SearchHardCoded(dexData, file.Name, patterns)
+	}()
+
+	// 启动工作池
+	var wg sync.WaitGroup
+	workChan := make(chan *zip.File, len(apkReader.File))
+	
+	// 工作池大小，根据CPU核心数调整
+	workerCount := 4
+	for i := 0; i < workerCount; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for file := range workChan {
+				fileReader, err := file.Open()
+				if err != nil {
+					progressChan <- 1
+					continue
+				}
+				
+				// 使用参数控制文件大小限制
+				dexData, err := io.ReadAll(io.LimitReader(fileReader, 1024*1024*(*ArgMaxSize)))
+				fileReader.Close()
+				if err != nil {
+					progressChan <- 1
+					continue
+				}
+				
+				// 搜索当前文件中的硬编码，并将结果发送到通道
+				results := SearchHardCoded(dexData, file.Name, patternCategories)
+				resultsChan <- results
+				progressChan <- 1
+			}
+		}()
+	}
+
+	// 将文件发送到工作通道
+	for _, file := range apkReader.File {
+		workChan <- file
+	}
+	close(workChan)
+
+	// 等待所有工作完成
+	go func() {
+		wg.Wait()
+		close(resultsChan)
+		close(progressChan)
+	}()
+
+	// 收集结果
+	for results := range resultsChan {
+		allResults = append(allResults, results...)
 	}
 	
+	// 结果去重
+	allResults = deduplicateResults(allResults)
+	
 	// 输出检测结果
-	if len(allHardCodedResults) > 0 {
-		outputHardCodedResultsAsText()
+	if len(allResults) > 0 {
+		outputHardCodedResultsAsText(allResults)
 	} else {
 		fmt.Printf("\n\n未发现硬编码特征\n")
 	}
@@ -225,15 +253,32 @@ func ScanAPKHardCoded(apkReader *zip.Reader) bool {
 	return true
 }
 
+// 结果去重函数
+func deduplicateResults(results []HardCodedResult) []HardCodedResult {
+	seen := make(map[string]bool)
+	var uniqueResults []HardCodedResult
+	
+	for _, result := range results {
+		// 使用文件路径、类别和匹配文本的组合作为唯一键
+		key := result.FilePath + "|" + result.Category + "|" + result.MatchText
+		if !seen[key] {
+			seen[key] = true
+			uniqueResults = append(uniqueResults, result)
+		}
+	}
+	
+	return uniqueResults
+}
+
 // 文本格式输出硬编码结果
-func outputHardCodedResultsAsText() {
-	fmt.Printf("\n\n===================== 硬编码检测结果 =====================\n")
+func outputHardCodedResultsAsText(results []HardCodedResult) {
+	fmt.Printf("\n--- 硬编码检测结果 ---")
 	
 	// 按类别分组显示结果
 	categoryMap := make(map[string][]HardCodedResult)
 	var categories []string
 	
-	for _, result := range allHardCodedResults {
+	for _, result := range results {
 		if _, exists := categoryMap[result.Category]; !exists {
 			categories = append(categories, result.Category)
 		}
@@ -243,16 +288,20 @@ func outputHardCodedResultsAsText() {
 	// 按类别名称排序
 	sort.Strings(categories)
 	
+	// 输出总统计信息
+	totalCount := len(results)
+	fmt.Printf("\n\n共检测到 %d 个硬编码特征，分布在 %d 个类别中", totalCount, len(categories))
+	
 	// 输出分组结果
 	for _, category := range categories {
-		fmt.Printf("\n[%s]\n", category)
-		results := categoryMap[category]
+		catResults := categoryMap[category]
+		fmt.Printf("\n\n[%s] - %d 个特征", category, len(catResults))
 		
 		// 按文件名分组
 		fileMap := make(map[string][]HardCodedResult)
 		var files []string
 		
-		for _, result := range results {
+		for _, result := range catResults {
 			if _, exists := fileMap[result.FilePath]; !exists {
 				files = append(files, result.FilePath)
 			}
@@ -264,14 +313,17 @@ func outputHardCodedResultsAsText() {
 		
 		// 输出每个文件的结果
 		for _, file := range files {
-			fmt.Printf("\n  文件: %s\n", file)
-			for _, result := range fileMap[file] {
-				fmt.Printf("    规则: %-30s\n", result.Pattern)
-				fmt.Printf("    匹配: %s\n", result.MatchText)
-				fmt.Printf("    %s\n", strings.Repeat("-", 60))
+			fileResults := fileMap[file]
+			fmt.Printf("\n\n  文件: %s - %d 个特征", file, len(fileResults))
+			for i, result := range fileResults {
+				fmt.Printf("\n    特征 %d:", i+1)
+				fmt.Printf("\n      规则: %s", result.Pattern)
+				fmt.Printf("\n      匹配: %s", result.MatchText)
+				fmt.Printf("\n      %s", strings.Repeat("-", 60))
 			}
 		}
 	}
 	
-	fmt.Printf("\n================================================================\n")
+	fmt.Printf("\n\n--- 硬编码检测结束 ---")
+	fmt.Printf("\n\n")
 }

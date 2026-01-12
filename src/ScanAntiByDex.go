@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"path"
+	"strings"
 )
 
 // 通用检测特征结构
@@ -249,10 +250,100 @@ var (
 
 // 清除所有检测结果
 func clearAntiResults() {
-	allRootResults = []string{}
-	allEmuResults = []string{}
-	allDebugResults = []string{}
-	allProxyResults = []string{}
+	// 预分配足够大的切片容量，避免频繁的内存重新分配
+	allRootResults = make([]string, 0, 500)
+	allEmuResults = make([]string, 0, 500)
+	allDebugResults = make([]string, 0, 500)
+	allProxyResults = make([]string, 0, 500)
+}
+
+// 计算最长特征长度，用于滑动窗口处理
+func getMaxPatternLength() int {
+	maxLen := 0
+	
+	// 检查所有特征的长度
+	for _, pattern := range RootFilePatterns {
+		if len(pattern.Pattern) > maxLen {
+			maxLen = len(pattern.Pattern)
+		}
+	}
+	
+	for _, pattern := range RootAppPatterns {
+		if len(pattern.Pattern) > maxLen {
+			maxLen = len(pattern.Pattern)
+		}
+	}
+	
+	for _, pattern := range EmulatorPatterns {
+		if len(pattern.Pattern) > maxLen {
+			maxLen = len(pattern.Pattern)
+		}
+	}
+	
+	for _, pattern := range DebugPatterns {
+		if len(pattern.Pattern) > maxLen {
+			maxLen = len(pattern.Pattern)
+		}
+	}
+	
+	for _, pattern := range ProxyPatterns {
+		if len(pattern.Pattern) > maxLen {
+			maxLen = len(pattern.Pattern)
+		}
+	}
+	
+	return maxLen
+}
+
+// 分块读取并检测文件内容，避免一次性加载大文件到内存
+func ScanFileByChunk(fileReader io.Reader, filePath string, maxSize int64) {
+	// 获取最长特征长度
+	maxPatternLen := getMaxPatternLength()
+	
+	// 设置块大小为8MB，加上最长特征长度作为重叠部分
+	chunkSize := int64(8 * 1024 * 1024)
+	overlapSize := int64(maxPatternLen) // 转换为int64类型
+	
+	// 创建缓冲区
+	buffer := make([]byte, chunkSize+overlapSize)
+	prevBuffer := make([]byte, overlapSize)
+	
+	// 限制读取大小
+	limitReader := io.LimitReader(fileReader, maxSize)
+	
+	for {
+		// 读取数据
+		n, err := limitReader.Read(buffer[overlapSize:])
+		if n == 0 {
+			break
+		}
+		
+		// 将上一次的末尾部分复制到当前缓冲区的开头
+		copy(buffer, prevBuffer)
+		
+		// 更新当前处理的数据长度
+		dataLen := overlapSize + int64(n) // 转换n为int64类型
+		
+		// 检测当前块中的特征
+		ScanDexAnti(buffer[:dataLen], filePath)
+		
+		// 保存当前块的末尾部分，用于下一次检测
+		if dataLen > overlapSize {
+			copy(prevBuffer, buffer[dataLen-overlapSize:dataLen])
+		} else {
+			copy(prevBuffer, buffer[:dataLen])
+			// 不足重叠大小，填充剩余部分
+			if dataLen < overlapSize {
+				for i := dataLen; i < overlapSize; i++ {
+					prevBuffer[i] = 0
+				}
+			}
+		}
+		
+		if err != nil {
+			break
+		}
+	}
 }
 
 func ScanAPKAnti(apkReader *zip.Reader) bool {
@@ -269,46 +360,80 @@ func ScanAPKAnti(apkReader *zip.Reader) bool {
             }
             
             // 使用main包中的maxsize参数
-            maxSize := int64(300 * 1024 * 1024) // 默认300MB
-            dexData, err := io.ReadAll(io.LimitReader(fileReader, maxSize))
-            fileReader.Close()
-            if err != nil {
-                fmt.Println(err)
-                continue
-            }
+            maxSize := int64(*ArgMaxSize) * 1024 * 1024 // 转换为字节单位
             
-            ScanDexAnti(dexData, file.Name)
+            // 分块读取和处理文件，避免一次性加载大文件到内存
+            ScanFileByChunk(fileReader, file.Name, maxSize)
+            fileReader.Close()
         }
     }
     
     // 输出结果
-    fmt.Println("\n===================== 安全检测特征扫描结果 =====================")
+    // 根据是否是内嵌APK调整缩进级别
+    mainIndent := "  - "
+    secondaryIndent := "    - "
+    tertiaryIndent := "      - "
+    if isEmbeddedAPK {
+        mainIndent = "    - "
+        secondaryIndent = "      - "
+        tertiaryIndent = "        - "
+    }
     
-    if *ArgCheckRoot && len(allRootResults) > 0 {
-        fmt.Println("\n[ROOT检测特征]")
-        for _, result := range allRootResults {
-            fmt.Println(result)
-        }
+    fmt.Println("\n" + mainIndent + "安全检测特征扫描结果")
+    
+    // 统计所有安全检测结果的数量
+    totalResults := 0
+    if *ArgCheckRoot {
+        totalResults += len(allRootResults)
     }
-
-    if *ArgCheckEmu && len(allEmuResults) > 0 {
-        fmt.Println("\n[模拟器检测特征]")
-        for _, result := range allEmuResults {
-            fmt.Println(result)
-        }
+    if *ArgCheckEmu {
+        totalResults += len(allEmuResults)
     }
-
-    if *ArgCheckDebug && len(allDebugResults) > 0 {
-        fmt.Println("\n[反调试检测特征]")
-        for _, result := range allDebugResults {
-            fmt.Println(result)
-        }
+    if *ArgCheckDebug {
+        totalResults += len(allDebugResults)
     }
+    if *ArgCheckProxy {
+        totalResults += len(allProxyResults)
+    }
+    
+    // 如果没有任何安全检测特征，输出提示
+    if totalResults == 0 {
+        fmt.Println(secondaryIndent + "未发现安全检测特征")
+    } else {
+        if *ArgCheckRoot && len(allRootResults) > 0 {
+            fmt.Println(secondaryIndent + "ROOT检测特征")
+            for _, result := range allRootResults {
+                // 移除行首的空格，然后添加适当的缩进
+                trimmedResult := strings.TrimSpace(result)
+                fmt.Printf(tertiaryIndent + "%s\n", trimmedResult)
+            }
+        }
 
-    if *ArgCheckProxy && len(allProxyResults) > 0 {
-        fmt.Println("\n[代理检测特征]")
-        for _, result := range allProxyResults {
-            fmt.Println(result)
+        if *ArgCheckEmu && len(allEmuResults) > 0 {
+            fmt.Println(secondaryIndent + "模拟器检测特征")
+            for _, result := range allEmuResults {
+                // 移除行首的空格，然后添加适当的缩进
+                trimmedResult := strings.TrimSpace(result)
+                fmt.Printf(tertiaryIndent + "%s\n", trimmedResult)
+            }
+        }
+
+        if *ArgCheckDebug && len(allDebugResults) > 0 {
+            fmt.Println(secondaryIndent + "反调试检测特征")
+            for _, result := range allDebugResults {
+                // 移除行首的空格，然后添加适当的缩进
+                trimmedResult := strings.TrimSpace(result)
+                fmt.Printf(tertiaryIndent + "%s\n", trimmedResult)
+            }
+        }
+
+        if *ArgCheckProxy && len(allProxyResults) > 0 {
+            fmt.Println(secondaryIndent + "代理检测特征")
+            for _, result := range allProxyResults {
+                // 移除行首的空格，然后添加适当的缩进
+                trimmedResult := strings.TrimSpace(result)
+                fmt.Printf(tertiaryIndent + "%s\n", trimmedResult)
+            }
         }
     }
     
