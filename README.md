@@ -1,44 +1,87 @@
 # ApkCheckPack
 
-**欢迎大家提交规则，或留意无法识别的加固app（提供demo或vt类下载哈希），争取每季度更新**
+**APK 加固检测工具** — 检测 Android APK 的加固特征、第三方 SDK、安全检测和硬编码信息
 
-**说明**
+## 功能特性
 
-English Please look: ./README_EN.md
+- **加固检测** — 基于特征库检测 40+ 厂商的加固方案（so库名/路径、类名、正则匹配）
+- **安全检测** — 检测 ROOT、模拟器、反调试、代理检测等反环境特征
+- **第三方 SDK** — 识别常见广告、推送、统计等 SDK
+- **硬编码扫描** — 扫描敏感信息泄露（可选，需开启 `-hardcode`）
+- **证书扫描** — 检测 APK 中的证书文件并输出详情
+- **内嵌 APK** — 支持递归扫描 XAPK 等内嵌 APK 文件
 
-工具只是辅助，新方式和厂商不断出现，特征查找方式可能遗漏，切勿完全依赖
+## 编译
 
-由于变动较大，工具更名为ApkCheckPack，大概是加固规则最全的开源工具：）
+```bash
+go build -o ApkCheckPack.exe ./cmd/apkcheckpack
+```
 
-将能收集到的加固特征汇总整理，支持40+厂商的加固检测，保存在apkpackdata.json文件，格式如下，有需求自取（加固规则更新时间 20260111，第三方SDK规则更新时间 20260111）
+## 使用方法
 
-    sopath 绝对路径的特征so
-    soname 仅特征so文件名
-    other 其他特征文件、字符串
-    soregex 对有版本号的特征so库，使用正则匹配
-    jclass dex内的java编译后代码，字符串匹配
+```bash
+ApkCheckPack.exe -f <APK文件路径或文件夹>
+```
 
-支持的功能
+### 参数说明
 
-    √ 加固特征扫描：通过对比加固特征so库名/路径，判断是否有加固
-    √ 反环境检测：扫描Dex文件搜索是否有Root、模拟器、反调试检测
-    √ 开发框架扫描：扫描特征so库名，判断是否有第三方SDK
-    √ 反代理检测：扫描代理检测类名，判断是否有反代理
-    √ 内嵌APK扫描：某些XAPK内嵌多个APK文件存在加固
-    √ 证书文件扫描：按后缀扫描证书文件并输出信息
-    X （临时取消）校验签名：校验V2签名，判断是否存在Janus漏洞
-    √ 密钥泄露：扫描Apk文件内容，匹配是否有密钥字符串
+| 参数 | 默认 | 说明 |
+|------|------|------|
+| `-f` | 必填 | APK 文件路径或文件夹路径 |
+| `-root` | true | 检测 ROOT 特征 |
+| `-emu` | true | 检测模拟器特征 |
+| `-debug` | true | 检测反调试特征 |
+| `-proxy` | true | 检测代理特征 |
+| `-sdk` | true | 检测第三方 SDK |
+| `-hardcode` | false | 启用硬编码扫描（可选） |
+| `-cert` | true | 检测证书信息 |
+| `-maxsize` | 500 | 单文件最大扫描大小 (MB) |
+| `-r` | true | 递归扫描内嵌 APK |
 
-改用go语言实现，规则也集成到单exe使用更方便
+### 示例
 
-到releases下载编译好的文件，后面跟文件或文件夹执行（已放弃GUI版本）
+```bash
+# 扫描单个 APK
+ApkCheckPack.exe -f test.apk
 
-`ApkCheckPack.exe -f test.apk`
+# 扫描文件夹
+ApkCheckPack.exe -f ./apks
 
-![gui](fun.png)
+# 开启硬编码扫描
+ApkCheckPack.exe -f test.apk -hardcode true
 
-使用参数-hardcode开启全文件硬编码信息扫描，同时注意默认最大扫500MB内部文件
+# 限制扫描文件大小
+ApkCheckPack.exe -f test.apk -maxsize 100
+```
 
-    ApkCheckPack.exe -hardcode true -f test.apk
+![fun](doc/fun.png)
 
-![gui2](help.png)
+## 项目结构
+
+```
+ApkCheckPack/
+├── cmd/apkcheckpack/main.go     # 主入口
+├── pkg/
+│   ├── sdk/                     # 第三方 SDK 检测
+│   ├── pack/                    # 加固检测
+│   ├── anti/                    # ROOT/模拟器/反调试/代理检测
+│   ├── hardcode/                # 硬编码检测
+│   └── certificate/             # 证书检测
+└── go.mod
+```
+
+**规则内置** — 所有规则数据编译到可执行文件中，无需外部配置。加固规则更新时间 20260111，第三方SDK规则更新时间 20260111。
+
+```
+sopath      绝对路径的特征so
+soname      仅特征so文件名
+other       其他特征文件、字符串
+soregex     对有版本号的特征so库，使用正则匹配
+jclass      dex内的java编译后代码，字符串匹配
+```
+
+## 说明
+
+工具只是辅助，新方式和厂商不断出现，特征查找方式可能遗漏，切勿完全依赖。
+
+欢迎提交规则，或提供无法识别的加固样本，争取持续更新。

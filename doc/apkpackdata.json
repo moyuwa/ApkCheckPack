@@ -491,7 +491,8 @@
       "tencent_stub"
     ],
     "soregex": [
-      "libshella\\-\\d+\\.\\d+\\.\\d+\\.\\d+\\.so"
+      "libshella\\-\\d+\\.\\d+\\.\\d+\\.\\d+\\.so",
+      "libWSSec(V?)\\.so"
     ]
   },
   "腾讯云加固": {
@@ -510,7 +511,8 @@
     ],
     "soregex": [
       "libshellx\\-super\\.\\d+\\.so",
-      "libshell\\-super\\.\\d+\\.so"
+      "libshell\\-super\\.\\d+\\.so",
+      "libshell\\-superv(.*)\\.\\d{4}\\.so"
     ]
   },
   "腾讯云移动应用安全": {
@@ -602,7 +604,8 @@
     ],
     "soname": [
       "libdSafeShell.so",
-      "libmxacc.so"
+      "libmxacc.so",
+      "libmanxi.so"
     ],
     "other": [
       "assets/mxsafe.config",
@@ -683,11 +686,13 @@
   },
   "顶像科技": {
     "sopath": [
-      "lib/armeabi/libx3g.so"
+      "lib/armeabi/libx3g.so",
+      "lib/arm64-v8a/libsys_misc.so"
     ],
     "soname": [
       "libx3g.so",
-      "libjni.so"
+      "libjni.so",
+      "libsys_misc.so"
     ],
     "other": [
     ],
@@ -737,9 +742,14 @@
   },
   "appguard.us加固": {
     "sopath": [
+      "lib/arm64-v8a/libAppGuard.so",
+      "lib/arm64-v8a/libdiresu.so"
     ],
     "soname": [
-      "libloader.so"
+      "libloader.so",
+      "libAppGuard.so",
+      "libAppGuard-x86.so",
+      "libdiresu.so"
     ],
     "other": [
     ],
@@ -772,6 +782,17 @@
       "Lcom/bishopsoft/Presto",
       "Presto_Init",
       "ATG_H init"
+    ]
+  },
+  "能信安科技": {
+    "sopath": [
+    ],
+    "soname": [
+      "libzprotect.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
     ]
   },
   "未知厂商": {

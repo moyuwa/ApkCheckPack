@@ -1,41 +1,87 @@
 # ApkCheckPack
 
-**Welcome everyone to submit rules, or pay attention to unrecognized reinforcement apps (provide demo or VT download hash), and strive to update quarterly**
+**APK Protection Detection Tool** — Detect Android APK protection features, third-party SDKs, security checks, and hardcoded information
 
-**Explanation（The file is machine translated）**
+## Features
 
-English Please look: ./README_EN.md
+- **Protection Detection** — Based on feature library to detect 40+ vendors' protection solutions (so library name/path, class name, regex matching)
+- **Security Detection** — Detect anti-environment features such as ROOT, emulator, anti-debugging, proxy detection
+- **Third-party SDK** — Identify common advertising, push, analytics SDKs
+- **Hardcode Scanning** — Scan for sensitive information leakage (optional, requires `-hardcode`)
+- **Certificate Scanning** — Detect certificate files in APK and output details
+- **Embedded APK** — Support recursive scanning of embedded APK files like XAPK
 
-Tools are only auxiliary, new methods and vendors are constantly emerging, and feature search methods may be overlooked. Do not rely solely on them
+## Build
 
-Due to significant changes, the tool has been renamed as ApkCheckPack, which is probably the most comprehensive open-source tool for hardening rules
+```bash
+go build -o ApkCheckPack.exe ./cmd/apkcheckpack
+```
 
-Summarize and organize the reinforcement features that can be collected, support reinforcement testing from 40 vendors, and save them in the apkpackdata.json file in the following format. If needed, retrieve them yourself (reinforcement rule update time 20250624, third-party SDK rule update time 20240922)
+## Usage
 
-    Sophath The Characteristics of Absolute Path
-    Soname only features so file name
-    Other feature files, strings
-    Soregex uses regular matching for feature libraries with version numbers
+```bash
+ApkCheckPack.exe -f <APK file path or folder>
+```
 
-Supported Features
+### Parameters
 
-    √ Reinforcement feature scanning: By comparing the reinforcement feature so library name/path, determine whether there is reinforcement
-    √ Anti environment detection: Scan Dex files to search for Root, emulator, and anti debugging detection
-    √ Development framework scanning: Scan the feature so library name to determine if there is a third-party SDK
-    √ Anti proxy detection: Scan the proxy detection class name to determine if there is any anti proxy detection
-    √ Embedded APK Scan: Some enhancements may embed multiple APK files within the APK
-    √ Certificate file scanning: scan certificate files by suffix and output Information
-    X (temporary cancellation) verification signature: Verify the V2 signature to determine if there is a Janus vulnerability
-    √ Key leakage: Scan the content of the Apk file to match whether there is a key string
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `-f` | required | APK file path or folder path |
+| `-root` | true | Detect ROOT features |
+| `-emu` | true | Detect emulator features |
+| `-debug` | true | Detect anti-debugging features |
+| `-proxy` | true | Detect proxy features |
+| `-sdk` | true | Detect third-party SDKs |
+| `-hardcode` | false | Enable hardcode scanning (optional) |
+| `-cert` | true | Detect certificate information |
+| `-maxsize` | 500 | Max scan size per file (MB) |
+| `-r` | true | Recursive scanning of embedded APKs |
 
-Implement in Go language instead, and integrate the rules into a single exe for easier use
+### Examples
 
-Download the compiled file from releases and execute it following the file or folder (GUI version abandoned)
+```bash
+# Scan single APK
+ApkCheckPack.exe -f test.apk
 
-![gui](fun.png)
+# Scan folder
+ApkCheckPack.exe -f ./apks
 
-Use the parameter - hardcode to enable full file hard coded Information scanning, and pay attention to the default maximum scanning of 500MB internal files
+# Enable hardcode scanning
+ApkCheckPack.exe -f test.apk -hardcode true
 
-    ApkCheckPack.exe -hardcode true -f test.apk
+# Limit scan file size
+ApkCheckPack.exe -f test.apk -maxsize 100
+```
 
-![gui2](help.png)
+![fun](doc/fun.png)
+
+## Project Structure
+
+```
+ApkCheckPack/
+├── cmd/apkcheckpack/main.go     # Main entry
+├── pkg/
+│   ├── sdk/                     # Third-party SDK detection
+│   ├── pack/                    # Protection detection
+│   ├── anti/                    # ROOT/emulator/anti-debugging/proxy detection
+│   ├── hardcode/                # Hardcode detection
+│   └── certificate/             # Certificate detection
+└── go.mod
+```
+
+**Built-in Rules** — All rule data is compiled into the executable, no external configuration required.
+
+```
+sopath      Absolute path of feature so files
+soname      Feature so file names only
+other       Other feature files, strings
+soregex     Regex matching for versioned feature so libraries
+jclass      Java compiled code in dex, string matching
+```
+
+## Note
+
+Tools are only auxiliary. New methods and vendors are constantly emerging, and feature detection may be overlooked. Do not rely solely on them.
+
+Welcome to submit rules or provide samples of unrecognized protection apps for continuous updates.
