@@ -237,14 +237,14 @@ func scanAPKData(apkReader *zip.Reader, isEmbedded bool) error {
 		sdk.Detect(apkReader, isEmbedded)
 	}
 
-	// 根据参数控制硬编码检测
-	if *argCheckHard {
-		hardcode.Detect(apkReader, maxScanBytes)
-	}
-
 	// 根据参数控制证书检测
 	if *argCheckCert {
 		certificate.Detect(apkReader, isEmbedded)
+	}
+
+	// 根据参数控制硬编码检测
+	if *argCheckHard {
+		hardcode.Detect(apkReader, maxScanBytes)
 	}
 
 	fmt.Printf("\n")

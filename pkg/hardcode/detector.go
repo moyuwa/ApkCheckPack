@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 )
 
 // HardCodedResult 硬编码检测结果
@@ -27,6 +28,11 @@ type PatternCategory struct {
 
 // Detect 检测APK中的硬编码敏感信息
 func Detect(apkReader *zip.Reader, maxScanSize int64) bool {
+	totalFiles := len(apkReader.File)
+	fmt.Printf("\n\n--- 硬编码扫描开始 ---")
+	fmt.Printf("\n待扫描文件数: %d", totalFiles)
+	fmt.Printf("\n单个文件最大扫描大小: %d MB", maxScanSize/1024/1024)
+
 	// 预编译所有正则表达式
 	var patternCategories []PatternCategory
 	for _, category := range HardCodeRules {
@@ -39,14 +45,25 @@ func Detect(apkReader *zip.Reader, maxScanSize int64) bool {
 		}
 	}
 
-	// 存储所有检测结果
 	var allResults []HardCodedResult
 	var mu sync.Mutex
 
-	// 启动工作池
-	workerCount := 4
+	var processed int64
+	progressChan := make(chan int, totalFiles)
+	resultChan := make(chan []HardCodedResult, 10)
+
+	// 启动进度显示goroutine
+	go func() {
+		for range progressChan {
+			count := atomic.AddInt64(&processed, 1)
+			percentage := float64(count) / float64(totalFiles) * 100
+			fmt.Printf("\r硬编码扫描进度: %d/%d (%.1f%%)", count, totalFiles, percentage)
+		}
+	}()
+
+	workerCount := 8
 	var wg sync.WaitGroup
-	workChan := make(chan *zip.File, len(apkReader.File))
+	workChan := make(chan *zip.File, totalFiles)
 
 	for i := 0; i < workerCount; i++ {
 		wg.Add(1)
@@ -55,43 +72,53 @@ func Detect(apkReader *zip.Reader, maxScanSize int64) bool {
 			for file := range workChan {
 				fileReader, err := file.Open()
 				if err != nil {
+					progressChan <- 1
 					continue
 				}
 
 				dexData, err := io.ReadAll(io.LimitReader(fileReader, maxScanSize))
 				fileReader.Close()
 				if err != nil {
+					progressChan <- 1
 					continue
 				}
 
-				// 搜索当前文件中的硬编码
 				results := searchHardCoded(dexData, file.Name, patternCategories)
 				if len(results) > 0 {
-					mu.Lock()
-					allResults = append(allResults, results...)
-					mu.Unlock()
+					resultChan <- results
 				}
+				progressChan <- 1
 			}
 		}()
 	}
 
-	// 将文件发送到工作通道
 	for _, file := range apkReader.File {
 		workChan <- file
 	}
 	close(workChan)
 
-	// 等待所有工作完成
-	wg.Wait()
+	// 等待工作完成并关闭通道
+	go func() {
+		wg.Wait()
+		close(resultChan)
+		close(progressChan)
+	}()
 
-	// 结果去重
+	// 收集所有结果
+	for results := range resultChan {
+		mu.Lock()
+		allResults = append(allResults, results...)
+		mu.Unlock()
+	}
+
+	fmt.Printf("\n\n")
+
 	allResults = deduplicateResults(allResults)
 
-	// 输出检测结果
 	if len(allResults) > 0 {
 		outputResults(allResults)
 	} else {
-		fmt.Printf("\n\n未发现硬编码特征")
+		fmt.Printf("\n未发现硬编码特征")
 	}
 
 	return true
